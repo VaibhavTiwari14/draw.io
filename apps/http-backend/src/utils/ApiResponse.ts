@@ -1,4 +1,4 @@
-import { StatusCodes } from '../lib/types'
+import { StatusCodes } from '@repo/common/enums'
 
 export type MetaObject = Record<string, unknown> | null;
 
