@@ -20,6 +20,9 @@ importers:
 
   apps/http-backend:
     dependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/DB
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -45,9 +48,6 @@ importers:
       '@repo/common':
         specifier: workspace:*
         version: link:../../packages/common
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../../packages/DB
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config

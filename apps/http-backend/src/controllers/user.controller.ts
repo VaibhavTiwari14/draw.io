@@ -15,20 +15,20 @@ import * as roomService from "../services/room.service";
 // ------------------- SIGN IN -------------------
 export const SignInUserController = asyncWrap(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = SignInSchema.safeParse(req.body);
+    const parsed = SignInSchema.safeParse(req.body);
 
-    if (!data.success) {
+    if (!parsed.success) {
       throw new ApiError({
         statusCode: StatusCodes.BadRequest,
         message: "Invalid request data",
-        details: data.error.format(),
+        details: parsed.error.format(),
         code: ErrorCode.VALIDATION_ERROR,
         isOperational: true,
       });
     }
 
     try {
-      const token = await userService.signInUser(data.data);
+      const token = await userService.signInUser(parsed.data);
 
       const responsePayload = new ApiResponse({
         statusCode: StatusCodes.OK,
@@ -46,20 +46,20 @@ export const SignInUserController = asyncWrap(
 // ------------------- SIGN UP -------------------
 export const SignUpUserController = asyncWrap(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = CreateUserSchema.safeParse(req.body);
+    const parsed = CreateUserSchema.safeParse(req.body);
 
-    if (!data.success) {
+    if (!parsed.success) {
       throw new ApiError({
         statusCode: StatusCodes.BadRequest,
         message: "Invalid request data",
-        details: data.error.format(),
+        details: parsed.error.format(),
         code: ErrorCode.VALIDATION_ERROR,
         isOperational: true,
       });
     }
 
     try {
-      const newUser = await userService.signUpUser(data.data);
+      const newUser = await userService.signUpUser(parsed.data);
 
       const responsePayload = new ApiResponse({
         statusCode: StatusCodes.Created,
@@ -77,13 +77,13 @@ export const SignUpUserController = asyncWrap(
 // ------------------- CREATE ROOM -------------------
 export const CreateUserRoomController = asyncWrap(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const data = CreateRoomSchema.safeParse(req.body);
+    const parsed = CreateRoomSchema.safeParse(req.body);
 
-    if (!data.success) {
+    if (!parsed.success) {
       throw new ApiError({
         statusCode: StatusCodes.BadRequest,
         message: "Invalid request data",
-        details: data.error.format(),
+        details: parsed.error.format(),
         code: ErrorCode.VALIDATION_ERROR,
         isOperational: true,
       });
@@ -92,7 +92,7 @@ export const CreateUserRoomController = asyncWrap(
     try {
       const room = await roomService.createRoom({
         userId: req.userId!,
-        ...data.data,
+        ...parsed.data,
       });
 
       const responsePayload = new ApiResponse({
