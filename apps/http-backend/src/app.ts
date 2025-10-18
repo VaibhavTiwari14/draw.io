@@ -1,10 +1,10 @@
+import cors from "cors";
 import express, { Application } from "express";
-import cors from 'cors';
 
-const app : Application = express();
+const app: Application = express();
 
-app.use(express.json({limit : "16kb"}));
-app.use(express.urlencoded({extended : true, limit : "16kb"}));
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(
   cors({
     origin: "*",
@@ -13,15 +13,12 @@ app.use(
   })
 );
 
-
-import userRouter from "./routes/user.routes";
 import { errorMiddleware } from "./lib/globalErrorHandler";
+import { roomRouter } from "./routes/rooms.routes";
+import userRouter from "./routes/user.routes";
 
-app.use('/api/v1/users', userRouter);
-
-
-
-
+app.use("/api/v1/users", userRouter);
+app.use("/api/vi/rooms", roomRouter);
 
 app.use(errorMiddleware);
 

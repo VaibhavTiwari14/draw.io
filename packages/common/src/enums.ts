@@ -47,3 +47,17 @@ export enum StatusCodes {
   BadGateway = 502,
   ServiceUnavailable = 503,
 }
+
+export enum WSEvent {
+  SEND_MESSAGE = "send_message",
+  NEW_MESSAGE = "new_message",
+  JOIN_ROOM = "join_room",
+  LEAVE_ROOM = "leave_room",
+  INVALID_EVENT = "invalid_event",
+}
+export interface SocketMessage {
+  type: "event";
+  event: WSEvent;
+  roomId: string;
+  message?: any;
+}

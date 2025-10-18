@@ -9,7 +9,6 @@ export async function createRoom({
   userId: string;
   roomName: string;
 }) {
-
   const slug = roomName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -38,9 +37,42 @@ export async function createRoom({
 
     return newRoom;
   } catch (error) {
+    if(error instanceof ApiError) throw error;
+    
     throw new ApiError({
       statusCode: 500,
       message: "Failed to create room",
+      code: ErrorCode.INTERNAL_SERVER_ERROR,
+      isOperational: false,
+      details: error as Error,
+    });
+  }
+}
+
+export async function getRoom({ roomId }: { roomId: string }) {
+  try {
+    const room = await prisma.room.findFirst({
+      where: {
+        id: roomId,
+      },
+    });
+
+    if (!room) {
+      throw new ApiError({
+        statusCode: 404,
+        message: "Room not found",
+        code: ErrorCode.NOT_FOUND,
+        isOperational: true,
+      });
+    }
+
+    return room;
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+
+    throw new ApiError({
+      statusCode: 500,
+      message: "Failed to fetch room",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,
       details: error as Error,
