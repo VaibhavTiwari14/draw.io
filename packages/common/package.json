@@ -2,8 +2,9 @@
   "name": "@repo/common",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -13,9 +14,10 @@
     "@repo/typescript-config": "workspace:*"
   },
   "exports": {
-    "./types": "./src/types.ts",
-    "./enums": "./src/enums.ts"
+    "./types": "./dist/types.js",
+    "./enums": "./dist/enums.js"
   },
+  "types": "./dist/index.d.ts",
   "keywords": [],
   "author": "",
   "license": "ISC",
