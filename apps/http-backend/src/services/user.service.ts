@@ -117,3 +117,34 @@ export async function signUpUser(input: SignUpInput) {
     });
   }
 }
+
+export async function getUser(userId: string) {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new ApiError({
+        statusCode: 404,
+        message: "User not found",
+        code: ErrorCode.NOT_FOUND,
+        isOperational: true,
+      });
+    }
+
+    return user;
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+
+    throw new ApiError({
+      statusCode: 500,
+      message: "Failed to get user",
+      code: ErrorCode.INTERNAL_SERVER_ERROR,
+      isOperational: false,
+      details: error as Error,
+    });
+  }
+}

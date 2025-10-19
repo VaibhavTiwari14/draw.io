@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from "express";
-import { asyncWrap } from "../utils/asyncHandler";
+import { ErrorCode, StatusCodes } from "@repo/common/enums";
 import {
   CreateRoomSchema,
   CreateUserSchema,
   SignInSchema,
 } from "@repo/common/types";
+import { NextFunction, Request, Response } from "express";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
+import * as roomService from "../services/room.service";
+import * as userService from "../services/user.service";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
-import { StatusCodes, ErrorCode } from "@repo/common/enums";
-import * as userService from "../services/user.service";
-import * as roomService from "../services/room.service";
+import { asyncWrap } from "../utils/asyncHandler";
 
 // ------------------- SIGN IN -------------------
 export const SignInUserController = asyncWrap(
@@ -99,6 +99,36 @@ export const CreateUserRoomController = asyncWrap(
         statusCode: StatusCodes.Created,
         message: "Room created successfully",
         data: { room },
+      });
+
+      res.status(StatusCodes.Created).json(responsePayload.toJSON());
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// ------------------- GET USER -------------------
+export const GetUserConroller = asyncWrap(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const { userId } = req?.params;
+
+    if (!userId) {
+      throw new ApiError({
+        statusCode: StatusCodes.BadRequest,
+        message: "Invalid UserId",
+        code: ErrorCode.INVALID_INPUT,
+        isOperational: true,
+      });
+    }
+
+    try {
+      const user = await userService.getUser(userId);
+
+      const responsePayload = new ApiResponse({
+        statusCode: StatusCodes.Created,
+        message: "User created successfully",
+        data: { user },
       });
 
       res.status(StatusCodes.Created).json(responsePayload.toJSON());
