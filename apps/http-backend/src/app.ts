@@ -16,9 +16,11 @@ app.use(
 import { errorMiddleware } from "./lib/globalErrorHandler";
 import { roomRouter } from "./routes/rooms.routes";
 import userRouter from "./routes/user.routes";
+import { chatRouter } from "./routes/chat.routes";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/vi/rooms", roomRouter);
+app.use("/api/vi/chats", chatRouter);
 
 app.use(errorMiddleware);
 

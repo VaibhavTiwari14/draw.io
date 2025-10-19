@@ -21,9 +21,18 @@ export const SignInSchema = z.object({
 });
 
 export const CreateRoomSchema = z.object({
-    roomName : z.string().min(3).max(20)
-})
+  roomName: z.string().min(3).max(20),
+});
+
+export const SaveChatSchema = z.object({
+  message: z.string().max(1000, "Max length for username is 1000"),
+  roomId: z.string(),
+});
 
 export type SignInInput = z.infer<typeof SignInSchema>;
 export type SignUpInput = z.infer<typeof CreateUserSchema>;
- 
+export type SaveChatInput = z.infer<typeof SaveChatSchema>;
+
+export interface SaveChatWithUserInput extends SaveChatInput {
+  userId: string;
+}

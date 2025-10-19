@@ -1,5 +1,5 @@
 import { JWT_EXPIRES_IN, JWT_SECRET } from "@repo/backend-common/config";
-import { ErrorCode } from "@repo/common/enums";
+import { ErrorCode, StatusCodes } from "@repo/common/enums";
 import { SignInInput, SignUpInput } from "@repo/common/types";
 import { prisma } from "@repo/db";
 import bcrypt from "bcrypt";
@@ -38,7 +38,7 @@ export async function signInUser({ email, password }: SignInInput) {
 
     if (!user) {
       throw new ApiError({
-        statusCode: 404,
+        statusCode: StatusCodes.NotFound,
         message: "User not found",
         code: ErrorCode.NOT_FOUND,
         isOperational: true,
@@ -49,7 +49,7 @@ export async function signInUser({ email, password }: SignInInput) {
 
     if (!isMatch) {
       throw new ApiError({
-        statusCode: 401,
+        statusCode: StatusCodes.Unauthorized,
         message: "Invalid credentials",
         code: ErrorCode.UNAUTHORIZED,
         isOperational: true,
@@ -63,7 +63,7 @@ export async function signInUser({ email, password }: SignInInput) {
     if (error instanceof ApiError) throw error;
 
     throw new ApiError({
-      statusCode: 500,
+      statusCode: StatusCodes.InternalServerError,
       message: "Failed to sign in user",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,
@@ -80,7 +80,7 @@ export async function signUpUser(input: SignUpInput) {
 
     if (existingUser) {
       throw new ApiError({
-        statusCode: 409,
+        statusCode: StatusCodes.Conflict,
         message: "User with this email already exists",
         code: ErrorCode.RESOURCE_EXISTS,
         isOperational: true,
@@ -109,7 +109,7 @@ export async function signUpUser(input: SignUpInput) {
     if (error instanceof ApiError) throw error;
 
     throw new ApiError({
-      statusCode: 500,
+      statusCode: StatusCodes.InternalServerError,
       message: "Failed to sign up user",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,
@@ -128,7 +128,7 @@ export async function getUser(userId: string) {
 
     if (!user) {
       throw new ApiError({
-        statusCode: 404,
+        statusCode: StatusCodes.NotFound,
         message: "User not found",
         code: ErrorCode.NOT_FOUND,
         isOperational: true,
@@ -140,7 +140,7 @@ export async function getUser(userId: string) {
     if (error instanceof ApiError) throw error;
 
     throw new ApiError({
-      statusCode: 500,
+      statusCode: StatusCodes.InternalServerError,
       message: "Failed to get user",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,

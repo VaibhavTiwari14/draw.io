@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/server.ts","./src/middlewares/auth.middleware.ts","./src/socket/messagerouter.ts","./src/socket/sockethandler.ts","./src/socket/events/joinroom.ts","./src/socket/events/leaveroom.ts","./src/socket/events/sendmessage.ts"],"version":"5.9.2"}

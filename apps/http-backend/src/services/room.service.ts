@@ -1,4 +1,4 @@
-import { ErrorCode } from "@repo/common/enums";
+import { ErrorCode, StatusCodes } from "@repo/common/enums";
 import { prisma } from "@repo/DB";
 import { ApiError } from "../utils/ApiError";
 
@@ -40,7 +40,7 @@ export async function createRoom({
     if(error instanceof ApiError) throw error;
     
     throw new ApiError({
-      statusCode: 500,
+      statusCode: StatusCodes.InternalServerError,
       message: "Failed to create room",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,
@@ -59,7 +59,7 @@ export async function getRoom({ roomId }: { roomId: string }) {
 
     if (!room) {
       throw new ApiError({
-        statusCode: 404,
+        statusCode: StatusCodes.NotFound,
         message: "Room not found",
         code: ErrorCode.NOT_FOUND,
         isOperational: true,
@@ -71,7 +71,7 @@ export async function getRoom({ roomId }: { roomId: string }) {
     if (error instanceof ApiError) throw error;
 
     throw new ApiError({
-      statusCode: 500,
+      statusCode: StatusCodes.InternalServerError,
       message: "Failed to fetch room",
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       isOperational: false,

@@ -111,9 +111,9 @@ export const CreateUserRoomController = asyncWrap(
 // ------------------- GET USER -------------------
 export const GetUserConroller = asyncWrap(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { userId } = req?.params;
+    const { userId } = req.params;
 
-    if (!userId) {
+    if (!userId || !userId.trim()) {
       throw new ApiError({
         statusCode: StatusCodes.BadRequest,
         message: "Invalid UserId",

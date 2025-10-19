@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
 import { StatusCodes } from "@repo/common/enums";
-import {prisma} from "@repo/DB";
+import { prisma } from "@repo/DB";
+import { NextFunction, Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { ApiError } from "../utils/ApiError";
+import { asyncHandler } from "../utils/asyncHandler";
 
 export interface AuthenticatedRequest extends Request {
   userId?: string;
@@ -42,7 +42,7 @@ export const authMiddleware = asyncHandler(
         "Token does not contain userId"
       );
     }
-    
+
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new ApiError(StatusCodes.Unauthorized, "User not found");

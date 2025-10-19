@@ -1,7 +1,7 @@
 import { Router } from "express";
+import { GetRoomController } from "../controllers/room.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
-import { getRoomController } from "../controllers/room.controller";
 
 export const roomRouter: Router = Router();
 
-roomRouter.route("/:roomId").get(authMiddleware, getRoomController);
+roomRouter.route("/:roomId").get(authMiddleware, GetRoomController);
