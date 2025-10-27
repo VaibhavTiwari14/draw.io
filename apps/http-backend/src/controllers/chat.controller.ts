@@ -70,36 +70,31 @@ export const SaveChatController = asyncWrap(
 );
 
 export const DeleteChatController = asyncWrap(
-  async (req: AuthenticatedRequest, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const chatId = Number(req.params.chatId);
+    const userId = req.userId!;
+
+    if (!chatId || Number.isNaN(chatId)) {
+      throw new ApiError({
+        statusCode: StatusCodes.BadRequest,
+        message: "Invalid chatId",
+        code: ErrorCode.INVALID_INPUT,
+        isOperational: true,
+      });
+    }
+
     try {
-      const chatId = Number(req.params.chatId);
-      const userId = req.userId!;
-
-      if (!chatId) {
-        return res.status(StatusCodes.BadRequest).json({
-          statusCode: StatusCodes.BadRequest,
-          message: "Chat ID is required",
-          code: ErrorCode.INVALID_INPUT,
-        });
-      }
-
       const result = await chatService.deleteChat(chatId, userId);
 
-      res.status(StatusCodes.OK).json({
+      const responsePayload = new ApiResponse({
         statusCode: StatusCodes.OK,
         message: "Message permanently deleted",
-        data: result,
+        data: { result },
       });
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return res.status(error.statusCode).json(error);
-      }
 
-      res.status(500).json({
-        statusCode: 500,
-        message: "Failed to delete chat",
-        code: ErrorCode.INTERNAL_SERVER_ERROR,
-      });
+      return res.status(StatusCodes.OK).json(responsePayload.toJSON());
+    } catch (error) {
+      next(error);
     }
   }
 );

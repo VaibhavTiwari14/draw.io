@@ -48,7 +48,7 @@ export const authMiddleware = asyncHandler(
       throw new ApiError(StatusCodes.Unauthorized, "User not found");
     }
 
-    req.userId = user.id.toString();
+    req.userId = user.id;
     next();
   }
 );
